@@ -1,0 +1,95 @@
+<!DOCTYPE HTML><html>
+<!-- Rui Santos - Complete project details at https://RandomNerdTutorials.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software. -->
+<head lang=fr-FR>
+    <meta charset="UTF-8">
+  <title>e-nefs Configuration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <!--    <script type="text/javascript" src="jquery-1.11.2.min.js"></script>-->
+  <style>
+    body {
+      min-width: 310px;
+    	max-width: 800px;
+    	height: 400px;
+      margin: 0 auto;
+    }
+    h2 {
+      font-family: Arial;
+      font-size: 2.5rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<h1>Configuration du Respirateur e-nefs</h1>
+
+<h3>Paramètres actuels :</h3>
+Temps :&nbsp&nbspTin :<span id="id_Tin"></span> s
+&nbsp&nbsp
+Tpl :<span id="id_Tpl"></span> s
+&nbsp&nbsp
+Tex :<span id="id_Tex"></span> s
+&nbsp&nbsp
+Tpe :<span id="id_Tpe"></span> s
+<br>
+<hr>
+
+<h3>Entrez les nouveaux paramètres :</h3>
+Temps :
+<form action='/config' method='GET'>
+    Tin : <input style='width: 50px' type='text' name='Tin' id='Tin' value=''>
+    &nbsp&nbsp
+    Tpl : <input style='width: 50px' type='text' name='Tpl' id='Tpl' value=''>
+    &nbsp&nbsp
+    Tex : <input style='width: 50px' type='text' name='Tex' id='Tex' value=''>
+    &nbsp&nbsp
+    Tpe : <input style='width: 50px' type='text' name='Tpe' id='Tpe' value=''>
+    <br>
+    <br><input style='height: 30px; width: 100px' type='submit' formaction='/config' value='Envoi'>
+</form>
+<hr>
+<br><br><a href='/'>Retour</a>
+</body>
+
+<script>
+   function DateFmt(b){this.formatString=b;var a=["Jan","Fev","Mar","Avr","Mai","Jun","Jul","Aut","Sep","Oct","Nov","Dec"];var e=["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];var d=function(f){return("0"+f).substr(-2,2)};var c={d:["getDate",function(f){return d(f)}],m:["getMonth",function(f){return d(f+1)}],n:["getMonth",function(f){return a[f]}],w:["getDay",function(f){return e[f]}],y:["getFullYear"],H:["getHours",function(f){return d(f)}],M:["getMinutes",function(f){return d(f)}],S:["getSeconds",function(f){return d(f)}],i:["toISOString"]};this.format=function(f){var g=this.formatString.replace(/%(.)/g,function(h,i){var j=f[(c[i])[0]]();if(c[i][1]!=null){j=c[i][1](j)}return j});return g}}
+
+
+ $(document).ready(function () {
+     var dth = new Date();
+     var fmtdate = new DateFmt("%d %n %y  - %H:%M:%S");
+     var SS = fmtdate.format(dth)
+     $("#id_dth").html(SS);
+     // récupère les paramètres
+     url = "param.json";
+     $.ajax({
+         type: "GET",
+         dataType: "json",
+         url: url,
+         success: function (data) {
+             //$("input[ name = type ]:eq(" + response.type + " )").attr("checked", "checked");
+             //$("input[ name = name ]").val( response.name);
+             $("#id_Tin").html(data.Tin);
+             $("#Tin").val(data.Tin);
+             $("#id_Tpl").html(data.Tpl);
+             $("#Tpl").val(data.Tpl);
+             $("#id_Tex").html(data.Tex);
+             $("#Tex").val(data.Tex);
+             $("#id_Tpe").html(data.Tpe);
+             $("#Tpe").val(data.Tpe);
+
+             var dth = new Date();
+             var fmtdate = new DateFmt("%d %n %y  - %H:%M:%S");
+             var SS = fmtdate.format(dth)
+             $("#id_dth").html(SS);
+         }
+     });
+ });
+
+</script>
+</html>

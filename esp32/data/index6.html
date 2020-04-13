@@ -1,0 +1,362 @@
+<!DOCTYPE HTML>
+<html>
+<!-- Rui Santos - Complete project details at https://RandomNerdTutorials.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software. -->
+<head lang=fr-FR>
+    <meta charset="UTF-8">
+    <title>e-nefs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+    <!--    <script type="text/javascript" src="jquery-1.11.2.min.js"></script>-->
+    <!--    <script type="text/javascript" src="highcharts.js"></script>-->
+    <style>
+        body {
+            min-width: 310px;
+            max-width: 800px;
+            height: 400px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-family: Arial;
+            font-size: 2.5rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<h1>Respirateur e-nefs</h1>
+<div id="chart-Press" class="container" style="height: 400px"></div>
+
+<h3>Grandeurs</h3>
+<ul>
+    <li>Press :&nbsp<span id="id_Press"></span>&nbsp bar</li>
+    <li>Vol : <span id="id_Vol"></span>&nbsp l</li>
+    <li>Umot : <span id="id_Umot"></span>&nbsp V</li>
+    <li>Running : <span id="id_Running"></span></li>
+    <li>Time :&nbsp<span id="id_dth"></span></li>
+</ul>
+<br>
+<hr>
+
+<h3>Paramètres</h3>
+Temps :&nbsp&nbspTin :<span id="id_Tin"></span> s
+&nbsp&nbsp
+Tpl :<span id="id_Tpl"></span> s
+&nbsp&nbsp
+Tex :<span id="id_Tex"></span> s
+&nbsp&nbsp
+Tpe :<span id="id_Tpe"></span> s
+<br>
+<hr>
+
+<br><a href='/config'>Configuration</a>
+<br><br><a href='data.csv'>Download data</a>
+<br><br>
+<p><a href='http://lat.univ-tlemcen.dz' target='_blank'>lat.univ-tlemcen.dz</a></p>
+
+</body>
+<script>
+    function DateFmt(b) {
+        this.formatString = b;
+        var a = ["Jan", "Fev", "Mar", "Avr", "Mai", "Jun", "Jul", "Aut", "Sep", "Oct", "Nov", "Dec"];
+        var e = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
+        var d = function (f) {
+            return ("0" + f).substr(-2, 2)
+        };
+        var c = {
+            d: ["getDate", function (f) {
+                return d(f)
+            }], m: ["getMonth", function (f) {
+                return d(f + 1)
+            }], n: ["getMonth", function (f) {
+                return a[f]
+            }], w: ["getDay", function (f) {
+                return e[f]
+            }], y: ["getFullYear"], H: ["getHours", function (f) {
+                return d(f)
+            }], M: ["getMinutes", function (f) {
+                return d(f)
+            }], S: ["getSeconds", function (f) {
+                return d(f)
+            }], i: ["toISOString"]
+        };
+        this.format = function (f) {
+            var g = this.formatString.replace(/%(.)/g, function (h, i) {
+                var j = f[(c[i])[0]]();
+                if (c[i][1] != null) {
+                    j = c[i][1](j)
+                }
+                return j
+            });
+            return g
+        }
+    }
+
+    //----------------------------------------------------------------------------
+    /*
+    function DateFmt(fstr) {
+        this.formatString = fstr
+
+        var mthNames = ["Jan","Fev","Mar","Avr","Mai","Jun","Jul","Aut","Sep","Oct","Nov","Dec"];
+        var dayNames = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
+        var zeroPad = function(number) {
+            return ("0"+number).substr(-2,2);
+        }
+
+        var dateMarkers = {
+            d:['getDate',function(v) { return zeroPad(v)}],
+            m:['getMonth',function(v) { return zeroPad(v+1)}],
+            n:['getMonth',function(v) { return mthNames[v]; }],
+            w:['getDay',function(v) { return dayNames[v]; }],
+            y:['getFullYear'],
+            H:['getHours',function(v) { return zeroPad(v)}],
+            M:['getMinutes',function(v) { return zeroPad(v)}],
+            S:['getSeconds',function(v) { return zeroPad(v)}],
+            i:['toISOString']
+        };
+
+        this.format = function(date) {
+            var dateTxt = this.formatString.replace(/%(.)/g, function(m, p) {
+                var rv = date[(dateMarkers[p])[0]]()
+                if ( dateMarkers[p][1] != null ) rv = dateMarkers[p][1](rv)
+                return rv
+            });
+            return dateTxt
+        }
+    }
+    //fmt = new DateFmt("%w %d:%n:%y - %H:%M:%S  %i")
+    //v = fmt.format(new Date())
+   */
+
+
+    $(document).ready(function () {
+        var dth = new Date();
+        var fmtdate = new DateFmt("%d %n %y  - %H:%M:%S");
+        var SS = fmtdate.format(dth)
+        $("#id_dth").html(SS);
+        // récupère les paramètres
+        url = "param.json";
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: url,
+            success: function (data) {
+                //$("input[ name = type ]:eq(" + response.type + " )").attr("checked", "checked");
+                //$("input[ name = name ]").val( response.name);
+                $("#id_Tin").html(data.Tin);
+                $("#id_Tpl").html(data.Tpl);
+                $("#id_Tex").html(data.Tex);
+                $("#id_Tpe").html(data.Tpe);
+
+                var dth = new Date();
+                var fmtdate = new DateFmt("%d %n %y  - %H:%M:%S");
+                var SS = fmtdate.format(dth)
+                $("#id_dth").html(SS);
+            }
+        });
+    });
+
+    setInterval(function () {
+        // refresh Data
+        url = "data.json";
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: url,
+            success: function (data) {
+                $("#id_Press").html(data.Press);
+                $("#id_Vol").html(data.Vol);
+                $("#id_Umot").html(data.Umot);
+                $("#id_Running").html(data.Run);
+
+                var dth = new Date();
+                var fmtdate = new DateFmt("%d %n %y  - %H:%M:%S");
+                var SS = fmtdate.format(dth)
+                $("#id_dth").html(SS);
+            }
+        });
+    }, 1000);
+
+    var chartP = new Highcharts.Chart({
+        chart: {
+            renderTo: 'chart-Press',
+            zoomType: 'xy'
+        },
+        title: {text: 'Données'},
+        series: [{
+            name: 'Pression',
+            type: 'spline',
+            showInLegend: true,
+            marker: {
+                enabled: false
+            },
+            tooltip: {
+                valueSuffix: ' bar'
+            },
+            yAxis: 0,
+            data: [],
+            color: '#FF0000'
+        },
+            {
+                name: 'Volume',
+                type: 'spline',
+                showInLegend: true,
+                marker: {
+                    enabled: false
+                },
+                tooltip: {
+                    valueSuffix: ' l'
+                },
+                yAxis: 1,
+                data: [],
+                color: '#00AA00'
+            },
+            {
+                name: 'Umoteur',
+                type: 'spline',
+                showInLegend: true,
+                marker: {
+                    enabled: false
+                },
+                tooltip: {
+                    valueSuffix: ' V'
+                },
+                yAxis: 2,
+                data: [],
+                color: '#0000FF'
+            }
+        ],
+        plotOptions: {
+            line: {
+                animation: false,
+                dataLabels: {enabled: true}
+            }
+        },
+        xAxis: {
+            type: 'datetime',
+           // dateTimeLabelFormats: {millisecond: '%M:%S.%L'},
+            crosshair: true
+        },
+        yAxis: [{    // pression
+            labels: {
+                format: '{value}bar',
+                style: {
+                    color: '#FF0000'
+                }
+            },
+            title: {text: 'Pression',
+                    style: {
+                    color:  '#FF0000'
+                }
+            }
+        },
+            {    // volume
+                labels: {
+                    format: '{value}l',
+                    style: {
+                        color: '#00AA00'
+                    }
+                },
+                title: {text: 'Volume',  style: {
+                        color:  '#00AA00'
+                    }
+                }
+            },
+            {    // Umot
+                labels: {
+                    format: '{value}V',
+                    style: {
+                        color: '#0000FF'
+                    }
+                },
+                title: {
+                text: 'Umoteur',
+                    style: {
+                    color:  '#0000FF'
+                }
+                },
+                opposite: true
+            }],
+        tooltip: {
+            shared: true
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'left',
+            x: 150,
+            verticalAlign: 'top',
+            y: 0,
+
+            floating: true,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || // theme
+                'rgba(255,255,255,0.25)'
+        },
+        credits: {enabled: false}
+    });
+/*
+    setInterval(function () {
+        // refresh Data
+        url = "data.json";
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: url,
+            success: function (data) {
+                var x = (new Date()).getTime();
+                if (chartP.series[0].data.length > 40) {
+                    chartP.series[0].addPoint([x, data.Press], true, true, true);
+                } else {
+                    chartP.series[0].addPoint([x, data.Press], true, false, true);
+                }
+
+                if (chartP.series[1].data.length > 40) {
+                    chartP.series[1].addPoint([x, data.Vol], true, true, true);
+                } else {
+                    chartP.series[1].addPoint([x, data.Vol], true, false, true);
+                }
+
+                if (chartP.series[2].data.length > 40) {
+                    chartP.series[2].addPoint([x, data.Umot], true, true, true);
+                } else {
+                    chartP.series[2].addPoint([x, data.Umot], true, false, true);
+                }
+            }
+        });
+
+
+    }, 500);
+*/
+    setInterval(function () {
+        // refresh Data
+        url = "dataarray.json";
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: url,
+            success: function (data) {
+                var x = (new Date()).getTime();
+                var Ts=200; // 200 ms
+                chartP.series[0].pointStart= x;
+                chartP.series[0].pointInterval = Ts;
+                chartP.series[1].pointStart= x;
+                chartP.series[1].pointInterval = Ts;
+                chartP.series[2].pointStart= x;
+                chartP.series[2].pointInterval = Ts;
+                chartP.series[0].setData( data.Press, false);
+                chartP.series[1].setData( data.Vol, false);
+                chartP.series[2].setData( data.Umot, false);
+                chartP.redraw(false);
+            }
+        });
+
+
+    }, 2000);  // debug
+</script>
+</html>
