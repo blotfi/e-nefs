@@ -1,3 +1,6 @@
 ihm3.png
 proto1.jpeg
 proto2.jpeg
+ihm3s.png
+proto1s.png
+proto2s.png
