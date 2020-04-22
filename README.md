@@ -13,10 +13,9 @@ I am using ESP32 Lolin32
 
 ## proto images
 These are first images of mechanical prototype
-![proto1](/img/proto1.jpeg)
-![proto1](/img/proto2.jpeg)
+![proto1](/img/proto1s.png)  ![proto2](/img/proto2s.png)
 
 
 Also the HMI on the web browser, using the ESP32 as the web server
-![ihm3](/img/ihm3.png)
+![ihm3](/img/ihm3s.png)
 
