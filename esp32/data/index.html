@@ -27,6 +27,10 @@ copies or substantial portions of the Software. -->
             font-size: 2.5rem;
             text-align: center;
         }
+        .cblue        {
+            color: darkblue;
+            color:#FF00FF;
+        }
     </style>
 </head>
 <body>
@@ -34,17 +38,76 @@ copies or substantial portions of the Software. -->
 <div id="chart-Press" class="container" style="height: 400px"></div>
 
 <h3>Grandeurs</h3>
-<ul>
-    <li>Press :&nbsp<span id="id_Press"></span>&nbsp bar</li>
-    <li>Vol : <span id="id_Vol"></span>&nbsp l</li>
-    <li>Umot : <span id="id_Umot"></span>&nbsp V</li>
-    <li>bPress : <span id="id_bPress"></span>&nbsp Pa</li>
-    <li>Temp : <span id="id_Temp"></span>&nbsp °C</li>
-    <li>Humid : <span id="id_Humid"></span>&nbsp %</li>
-    <li>Running : <span id="id_Running"></span></li>
-    <li>Time :&nbsp<span id="id_dth"></span></li>
-</ul>
-<br>
+<table>
+    <tr>
+        <td>
+            <label style="color:#FF0000;">Press (?):</label>
+        </td>
+        <td style="width:80px;">
+            <label id="id_Press" style="color:#FF0000; font-weight:bold;"/>
+        </td>
+       <td>
+            <label>Pos (mm):</label>
+        </td>
+        <td style="width:80px;">
+            <label id="id_Pos" style="font-weight:bold;"/>
+        </td>
+      <td>
+            <label> P.Atm (Pa):</label>
+        </td>
+        <td style="width:80px;">
+            <label id="id_bPress" style="font-weight:bold;"/>
+        </td>
+        <td style="width:200px;">
+            <label>Status :</label>
+            <label id="id_Running" style="color:#00FF00; font-weight:bold;"></label>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <label style="color:#00AA00;">Vol (?):</label>
+        </td>
+        <td>
+            <label id="id_Vol" style="color:#00AA00; font-weight:bold;"/>
+        </td>
+        <td>
+            <label>Pos Max (mm) :</label>
+        </td>
+        <td>
+            <label id="id_PosMax" style="font-weight:bold;"/>
+        </td>
+       <td>
+            <label>Temp (°C) :</label>
+        </td>
+        <td>
+            <label id="id_Temp" style="font-weight:bold;"/>
+        </td>
+        <td>
+            <input type="button" onclick="RunClic()" value="Run / Stop" />
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <label style="color:#0000FF;">Umot (V):</label>
+        </td>
+        <td>
+            <label id="id_Umot" style="color:#0000FF; font-weight:bold;"/>
+        </td>
+        <td></td>
+        <td></td>
+        <td>
+            <label>Humid (%) :</label>
+        </td>
+        <td>
+            <label id="id_Humid" style="font-weight:bold;"/>
+        </td>
+        <td>
+            Time : <span class="cblue" id="id_dth"></span>
+        </td>
+    </tr>
+</table>
 <hr>
 
 <h3>Paramètres</h3>
@@ -165,6 +228,24 @@ Tpe :<span id="id_Tpe"></span> s
         });
     });
 
+    function RunClic() {
+        url = "run";
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: url,
+            success: function (data) {
+                if (data.Run == "1") {
+                    $("#id_Running").html("Running");
+                    $("#id_Running").css("color", "#00FF00");
+                } else {
+                    $("#id_Running").html("Stopped");
+                    $("#id_Running").css("color", "#FF0000");
+                }
+            }
+        });
+    }
+
     setInterval(function () {
         // refresh Data
         url = "data.json";
@@ -175,12 +256,19 @@ Tpe :<span id="id_Tpe"></span> s
             success: function (data) {
                 $("#id_Press").html(data.Press);
                 $("#id_Vol").html(data.Vol);
+                $("#id_Pos").html(data.Pos);
+                $("#id_PosMax").html(data.PosMax);
                 $("#id_Umot").html(data.Umot);
                 $("#id_bPress").html(data.bPress);
                 $("#id_Temp").html(data.Temp);
                 $("#id_Humid").html(data.Humid);
-                $("#id_Running").html(data.Run);
-
+                if (data.Run == "1") {
+                    $("#id_Running").html("Running");
+                    $("#id_Running").css("color", "#00FF00");
+                } else {
+                    $("#id_Running").html("Stopped");
+                    $("#id_Running").css("color", "#FF0000");
+                }
                 var dth = new Date();
                 var fmtdate = new DateFmt("%d %n %y  - %H:%M:%S");
                 var SS = fmtdate.format(dth)
