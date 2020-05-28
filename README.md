@@ -36,13 +36,17 @@ These are the first stage photos of the mechanical prototype
 
 ![proto1](/img/proto1s.png)  ![proto2](/img/proto2s.png)
 
-![proto1](/img/enefs_2.png) 
+![enefs_2](/img/enefs_2.jpg) 
 
 
 Also the HMI on the web browser, using the ESP32 as the web server
 ![ihm3](/img/ihm3s.png)
 
 Videos of working prototype:<br/>
-https://www.youtube.com/watch?v=TYXenkf9Xuk&list=PLXYd8IyLhtrE_5peLIUVFXS2KW_LJ0eVU&index=1
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/TYXenkf9Xuk/0.jpg)](http://www.youtube.com/watch?v=TYXenkf9Xuk "e-nefs Emergency Ventilator")
+
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/oN_KBbfUivY/0.jpg)](http://www.youtube.com/watch?v=oN_KBbfUivY "e-nefs Emergency Ventilator")
+
+
 
 Last updated May 29, 2020
