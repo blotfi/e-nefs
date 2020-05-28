@@ -36,8 +36,13 @@ These are the first stage photos of the mechanical prototype
 
 ![proto1](/img/proto1s.png)  ![proto2](/img/proto2s.png)
 
+![proto1](/img/enefs_2.png) 
+
 
 Also the HMI on the web browser, using the ESP32 as the web server
 ![ihm3](/img/ihm3s.png)
 
-Last updated April 25, 2020
+Videos of working prototype:<br/>
+https://www.youtube.com/watch?v=TYXenkf9Xuk&list=PLXYd8IyLhtrE_5peLIUVFXS2KW_LJ0eVU&index=1
+
+Last updated May 29, 2020
