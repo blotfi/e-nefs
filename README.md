@@ -20,9 +20,9 @@ I am using ESP32 Lolin32
 - Display relevant data on SSD1302 **OLED screen** through I2C - U8g2 library
 
 #### Todo
-- Save recorded data
-- Implement sensors and routine to limit the moving path of the arm (Reed switch)
-- Implement sensors and routine to count the incremental motion of the motor (IR based self made sensor)
+- ~~Save recorded data~~ Done
+- ~~Implement sensors and routine to limit the moving path of the arm (Reed switch)~~ Done
+- ~~Implement sensors and routine to count the incremental motion of the motor (IR based self made sensor)~~ Done
 - Replce both sensors with a VL53L0X **Time-of-Flight** (ToF) Laser Ranging Sensor (to be acquired)
 - Reposition the mechanical balloon to get more compression
 - Estimate or measure the bidirectional air flow 
@@ -49,4 +49,4 @@ Videos of working prototype:<br/>
 
 
 
-Last updated May 29, 2020
+Last updated June 11, 2020
